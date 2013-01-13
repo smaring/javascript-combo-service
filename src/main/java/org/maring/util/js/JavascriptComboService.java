@@ -107,10 +107,17 @@ public class JavascriptComboService extends HttpServlet {
 					
 					StringBuffer fileData = new StringBuffer();
 					FileReader fileReader = null;
-					try {
-						fileReader = new FileReader(this.getServletContext().getRealPath(fileRef));
-					} catch (FileNotFoundException fnfe) {
-						log.warn("file " + this.getServletContext().getRealPath(fileRef) + " was not found");
+					String realPath = this.getServletContext().getRealPath(fileRef);
+
+					if (realPath != null) {
+						try {
+							fileReader = new FileReader(this.getServletContext().getRealPath(fileRef));
+						} catch (FileNotFoundException fnfe) {
+							log.warn("file " + this.getServletContext().getRealPath(fileRef) + " was not found");
+							continue;
+						}
+					} else {
+						log.warn("file " + fileRef + " was not found");
 						continue;
 					}
 			        BufferedReader reader = new BufferedReader(fileReader);
